@@ -2,7 +2,7 @@
 export GO111MODULE=on
 
 # Image URL to use all building/pushing image targets
-DOCKER_REG ?= ${or ${VC_DOCKER_REGISTRY},"virtualcluster"}
+DOCKER_REG ?= ${or ${VC_DOCKER_REGISTRY},"quay.io/alexeykazakov"}
 IMG ?= ${DOCKER_REG}/manager-amd64 ${DOCKER_REG}/vn-agent-amd64 ${DOCKER_REG}/syncer-amd64
 
 # TEST_FLAGS used as flags of go test.

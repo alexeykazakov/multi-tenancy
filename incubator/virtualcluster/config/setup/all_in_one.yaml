@@ -236,7 +236,7 @@ spec:
         args:
         - --disable-stacktrace=true
         - --enable-webhook=true
-        image: virtualcluster/manager-amd64
+        image: quay.io/alexeykazakov/manager-amd64
         imagePullPolicy: Always
         name: vc-manager
 ---
@@ -376,7 +376,7 @@ spec:
       containers:
         - command:
             - syncer
-          image: virtualcluster/syncer-amd64
+          image: quay.io/alexeykazakov/syncer-amd64
           imagePullPolicy: Always
           name: vc-syncer
           livenessProbe:
@@ -460,7 +460,7 @@ spec:
           - --cert-dir=/etc/vn-agent/
           - --kubelet-client-certificate=/etc/vn-agent/pki/client.crt
           - --kubelet-client-key=/etc/vn-agent/pki/client.key
-          image: virtualcluster/vn-agent-amd64
+          image: quay.io/alexeykazakov/vn-agent-amd64
           imagePullPolicy: Always
           name: vn-agent
           volumeMounts:

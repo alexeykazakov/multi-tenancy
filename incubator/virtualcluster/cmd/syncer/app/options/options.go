@@ -84,7 +84,7 @@ func NewResourceSyncerOptions() (*ResourceSyncerOptions, error) {
 			VNAgentPort:                int32(10550),
 		},
 		Address:  "",
-		Port:     "80",
+		Port:     "8880",
 		CertFile: "",
 		KeyFile:  "",
 	}, nil
