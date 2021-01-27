@@ -25,7 +25,7 @@ VC_OUTPUT_DIR=${VC_ROOT}/_output/
 VC_BIN_DIR=${VC_OUTPUT_DIR}/bin/
 VC_RELEASE_DIR=${VC_OUTPUT_DIR}/release/
 
-readonly VC_DOCKER_REGISTRY="${VC_DOCKER_REGISTRY:-virtualcluster}"
+readonly VC_DOCKER_REGISTRY="${VC_DOCKER_REGISTRY:-quay.io/alexeykazakov}"
 readonly VC_BASE_IMAGE_REGISTRY="${VC_BASE_IMAGE_REGISTRY:-k8s.gcr.io}"
 
 DOCKER="docker"
