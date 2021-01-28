@@ -21,6 +21,8 @@ import (
 	"os"
 	"path"
 
+	"github.com/pkg/errors"
+
 	certutil "k8s.io/client-go/util/cert"
 	"k8s.io/client-go/util/keyutil"
 	"k8s.io/klog"
@@ -31,16 +33,19 @@ import (
 // InitializeTLS checks for a configured TLSCertFile and TLSPrivateKeyFile: if unspecified a new self-signed
 // certificate and key file are generated.
 func InitializeTLS(certDirectory, certFile, privateKeyFile, suffix string) (*config.TLSOptions, error) {
+	fmt.Printf("INFO: initializing certs. certDirectory: %v; certFile: %v; privateKeyFile: %v; suffix: %v\n", certDirectory, certFile, privateKeyFile, suffix)
 	if certFile == "" && privateKeyFile == "" {
+		fmt.Println("INFO: generationg self-signed certs")
 		certFile = path.Join(certDirectory, fmt.Sprintf("%s.crt", suffix))
 		privateKeyFile = path.Join(certDirectory, fmt.Sprintf("%s.key", suffix))
 
 		canReadCertAndKey, err := certutil.CanReadCertAndKey(certFile, privateKeyFile)
 		if err != nil {
-			return nil, err
+			fmt.Printf("ERROR: failed to read cert and key: %v\n", err)
+			//return nil, err
 		}
 
-		if !canReadCertAndKey {
+		if err != nil || !canReadCertAndKey {
 			hostName, err := os.Hostname()
 			if err != nil {
 				return nil, fmt.Errorf("couldn't determine hostname: %v", err)
@@ -51,11 +56,11 @@ func InitializeTLS(certDirectory, certFile, privateKeyFile, suffix string) (*con
 			}
 
 			if err := certutil.WriteCert(certFile, cert); err != nil {
-				return nil, err
+				return nil, errors.Wrap(err, fmt.Sprintf("unable to generate self signed cert in %v", certFile))
 			}
 
 			if err := keyutil.WriteKey(privateKeyFile, key); err != nil {
-				return nil, err
+				return nil, errors.Wrap(err, fmt.Sprintf("unable to generate self signed private key in %v", privateKeyFile))
 			}
 
 			klog.Infof("Using self-signed cert (%s, %s)", certFile, privateKeyFile)

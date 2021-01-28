@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -117,7 +118,19 @@ func Run(c *config.Config, serverOption *options.ServerOption, stopCh <-chan str
 
 	tlsConfig, err := certificate.InitializeTLS(serverOption.CertDirectory, serverOption.TLSCertFile, serverOption.TLSPrivateKeyFile, "vn")
 	if err != nil {
-		return errors.Wrapf(err, "failed to initial tls config")
+		fmt.Printf("ERROR: failed to initial tls config: %v\n", err)
+		fmt.Printf("ERROR: cert file: %v\n", serverOption.TLSCertFile)
+		fmt.Printf("ERROR: cert private key file: %v\n", serverOption.TLSPrivateKeyFile)
+		for i := 0; i < 10000; i++ {
+			tlsConfig, err = certificate.InitializeTLS(serverOption.CertDirectory, "", "", "vn")
+			if err != nil {
+				fmt.Printf("ERROR: failed to initial tls config: %v\n", err)
+			} else {
+				break
+			}
+			time.Sleep(time.Second)
+		}
+		// return errors.Wrapf(err, "failed to initial tls config")
 	}
 
 	klog.Infof("server listen on %s", s.Addr)

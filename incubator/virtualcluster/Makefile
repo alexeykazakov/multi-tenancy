@@ -172,3 +172,8 @@ endif
 .PHONY: test-e2e-k8s
 test-e2e-k8s:
 	hack/make-rules/test-e2e-k8s.sh
+
+.PHONY: redeploy
+redeploy: build-images docker-push
+	$(Q)-oc delete -f ./config/setup/all_in_one.yaml
+	$(Q)-oc apply -f ./config/setup/all_in_one.yaml
